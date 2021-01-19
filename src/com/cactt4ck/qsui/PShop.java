@@ -42,7 +42,7 @@ public class PShop implements CommandExecutor {
             int i = 0;
             for (Shop shop : QuickShopAPI.getShopAPI().getAllShops()) {
                 if (!playerList.contains(Bukkit.getOfflinePlayer(shop.getOwner()).getName()) &&
-                        Main.config.contains("locations." + Bukkit.getOfflinePlayer(shop.getOwner()).getName() + ".x")) {
+                        Main.config.getLocation("locations." + Bukkit.getOfflinePlayer(shop.getOwner()).getName()) != null) {
                     playerList.add(Bukkit.getOfflinePlayer(shop.getOwner()).getName());
                     shopListInventory.setItem(i, getPlayerHead(shop.getOwner()));
                     i++;
@@ -54,13 +54,7 @@ public class PShop implements CommandExecutor {
         } else if (cmd.getName().equalsIgnoreCase("setpshop")) {
             if (args.length > 0)
                 return false;
-            Location location = p.getLocation();
-            Main.config.set("locations." + p.getName() + ".x", location.getX());
-            Main.config.set("locations." + p.getName() + ".y", location.getY());
-            Main.config.set("locations." + p.getName() + ".z", location.getZ());
-            Main.config.set("locations." + p.getName() + ".world", location.getWorld().getName());
-            Main.config.set("locations." + p.getName() + ".yaw", location.getYaw());
-            Main.config.set("locations." + p.getName() + ".pitch", 0F);
+            Main.config.set("locations." + p.getName(), p.getLocation());
             try {
                 Main.config.save(Main.configFile);
             } catch (IOException e) {
@@ -72,7 +66,7 @@ public class PShop implements CommandExecutor {
         } else if (cmd.getName().equalsIgnoreCase("delpshop")) {
             if (args.length > 0)
                 return false;
-            if (!Main.config.contains("locations." + p.getName() + ".x")) {
+            if (Main.config.getLocation("locations." + p.getName()) == null) {
                 p.sendMessage("Vous n'avez pas de point de téléportation à votre shop");
                 return true;
             }
@@ -85,18 +79,11 @@ public class PShop implements CommandExecutor {
             p.sendMessage("Point de téléportation de votre shop supprimé");
             return true;
         }
-
         return false;
     }
 
     public static Location getLocationFromConfigYML(String playerName) {
-        double x = Main.config.getDouble("locations." + playerName + ".x"),
-                y = Main.config.getDouble("locations." + playerName + ".y"),
-                z = Main.config.getDouble("locations." + playerName + ".z");
-        World world = Bukkit.getWorld(Main.config.getString("locations." + playerName + ".world"));
-        float yaw  = (float) Main.config.getInt("locations." + playerName + ".yaw"),
-                pitch  = (float) Main.config.getInt("locations." + playerName + ".pitch");
-        return new Location(world, x, y, z, yaw, pitch);
+        return Main.config.getLocation("locations." + playerName);
     }
 
     private ItemStack getPlayerHead(UUID uuid) {
