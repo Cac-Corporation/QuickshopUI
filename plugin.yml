@@ -1,0 +1,30 @@
+api-version: 1.16
+author: CacTt4ck
+name: QuickshopUI
+main: com.cactt4ck.qsui.Main
+version: 1.0.0
+depend:
+  - Vault
+  - QuickShop
+
+commands:
+  pshop:
+    description: Affiche la liste des boutiques des joueurs.
+    permission: qsui.pshop
+  setpshop:
+    description: Défini le point de téléportation du shop.
+    permission: qsui.setpshop
+  delpshop:
+    description: Supprime le point de téléportation du shop
+    permission: qsui.delpshop
+
+permissions:
+  qsui.pshop:
+    description: Autorise le joueur à utiliser /pshop.
+    default: true
+  qsui.setpshop:
+    description: Autorise le joueur à utiliser /setpshop.
+    default: true
+  qsui.delpshop:
+    description: Autorise le joueur à utiliser /setpshop.
+    default: true

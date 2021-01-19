@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="QuickShop-4.0.4.14">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/QuickShop-4.0.4.14.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/QuickShop-4.0.4.14.jar!/" />
+    </SOURCES>
+  </library>
+</component>
