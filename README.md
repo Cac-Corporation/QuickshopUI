@@ -36,7 +36,8 @@ locations:
     yaw: -82.01683
 ```
 ---
-UPDATED</br>
+UPDATED
+
 All the information about player teleport point are stored in the ```database.db``` Database file that is created
 at the start of the server if doesn't exist.
 ---
