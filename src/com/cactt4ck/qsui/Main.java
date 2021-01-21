@@ -42,7 +42,7 @@ public class Main extends JavaPlugin {
     }
 
     private void initBDD() {
-        String uri = this.getDataFolder().toString() + "\\database.db";
+        String uri = this.getDataFolder() + "/database.db";
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + uri)) {
             if (connection != null) {
                 DatabaseMetaData metaData = connection.getMetaData();
