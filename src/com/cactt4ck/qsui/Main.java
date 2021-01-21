@@ -2,6 +2,7 @@ package com.cactt4ck.qsui;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -21,10 +22,16 @@ public class Main extends JavaPlugin {
     private Logger logger = Bukkit.getLogger();
     public static FileConfiguration config;
     public static File configFile;
+    private Connection connection;
 
     @Override
     public void onEnable() {
         super.onEnable();
+        try {
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         logger.log(Level.INFO, "QuickShop UI started!");
         this.initBDD();
 
@@ -34,22 +41,35 @@ public class Main extends JavaPlugin {
         this.saveDefaultConfig();
         config = YamlConfiguration.loadConfiguration(configFile);
 
-        CommandExecutor quickshop = new PShop();
+        CommandExecutor quickshop = new PShop(this);
+        TabCompleter tabCompleter = new QsUITabCompleter();
         this.getCommand("pshop").setExecutor(quickshop);
-        this.getCommand("setpshop").setExecutor(quickshop);
-        this.getCommand("delpshop").setExecutor(quickshop);
-        Bukkit.getPluginManager().registerEvents(new InventoryListeners(), this);
+        this.getCommand("pshop").setTabCompleter(tabCompleter);
+        Bukkit.getPluginManager().registerEvents(new InventoryListeners(this), this);
+    }
+
+    @Override
+    public void onDisable() {
+        super.onDisable();
+        try {
+            this.connection.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
     private void initBDD() {
         String uri = this.getDataFolder() + "/database.db";
-        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + uri)) {
-            if (connection != null) {
-                DatabaseMetaData metaData = connection.getMetaData();
-            }
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
+            if (connection != null)
+                this.connection = connection;
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    public Connection getConnection() {
+        return connection;
+    }
 }

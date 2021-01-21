@@ -9,22 +9,17 @@ depend:
 
 commands:
   pshop:
-    description: Affiche la liste des boutiques des joueurs.
+    description: Commande de base du plugin.
+    usage: /pshop
     permission: qsui.pshop
-  setpshop:
-    description: Défini le point de téléportation du shop.
-    permission: qsui.setpshop
-  delpshop:
-    description: Supprime le point de téléportation du shop
-    permission: qsui.delpshop
 
 permissions:
   qsui.pshop:
     description: Autorise le joueur à utiliser /pshop.
     default: true
-  qsui.setpshop:
-    description: Autorise le joueur à utiliser /setpshop.
+  qsui.pshop.setwarp:
+    description: Autorise le joueur à utiliser /pshop setwarp.
     default: true
-  qsui.delpshop:
-    description: Autorise le joueur à utiliser /setpshop.
+  qsui.pshop.delwarp:
+    description: Autorise le joueur à utiliser /pshop delwarp.
     default: true
