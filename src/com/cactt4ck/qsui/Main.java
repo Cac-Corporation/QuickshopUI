@@ -10,10 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,7 +29,7 @@ public class Main extends JavaPlugin {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        logger.log(Level.INFO, "QuickShop UI started!");
+        logger.log(Level.INFO, "[QuickshopUI] QuickShop UI started!");
         this.initBDD();
 
         config = this.getConfig();
@@ -62,8 +59,18 @@ public class Main extends JavaPlugin {
         String uri = this.getDataFolder() + "/database.db";
         try {
             Connection connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
-            if (connection != null)
+            if (connection != null) {
                 this.connection = connection;
+                DatabaseMetaData metaData = connection.getMetaData();
+                ResultSet resultSet = metaData.getTables(null, null, "shop_location", null);
+                if (!resultSet.next()){
+                    String createTableQuery = "create table shop_location (id INTEGER constraint shop_location_pk primary key autoincrement, playername TEXT, world TEXT, x DOUBLE, y DOUBLE, z DOUBLE, yaw FLOAT, pitch FLOAT)";
+                    Statement statement = connection.createStatement();
+                    statement.execute(createTableQuery);
+                    logger.log(Level.INFO, "[QuickshopUI] §cDatabase not found! Creating one.");
+                } else
+                    logger.log(Level.INFO, "[QuickshopUI] §aDatabase found! Loading it.");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
