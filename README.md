@@ -39,4 +39,4 @@ locations:
 UPDATED
 
 All the information about player teleport point are stored in the ```database.db``` Database file.
-This file is created at the start of the server if doesn't exist.
+This file is created at the start of the server if it doesn't exist.
